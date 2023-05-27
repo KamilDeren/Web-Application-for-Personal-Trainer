@@ -1,10 +1,12 @@
 package pl.deren.trainer.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -14,13 +16,20 @@ import java.util.List;
 public class Training {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String title;
     private String level;
-    private String date;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Berlin")
+    private Timestamp date;
+
     private String room;
     private long run_by;
-    private String created_at;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Berlin")
+    private Timestamp created_at;
 
     @JsonIgnoreProperties("trainings")
     @ManyToMany

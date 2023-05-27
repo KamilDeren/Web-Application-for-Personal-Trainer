@@ -1,9 +1,8 @@
 package pl.deren.trainer.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
 import pl.deren.trainer.model.Training;
 import pl.deren.trainer.service.TrainingService;
 
@@ -16,8 +15,10 @@ public class TrainingController {
     private final TrainingService trainingService;
 
     @GetMapping("/trainings")
-    public List<Training> getTrainings(){
-        return trainingService.getTrainings(0);
+    public List<Training> getTrainings(@RequestParam(required = false) Integer page, Sort.Direction sort){
+        int pageNumber = page != null && page >= 0 ? page : 0;
+        Sort.Direction sortDirection = sort != null ? sort : Sort.Direction.ASC;
+        return trainingService.getTrainings(pageNumber, sortDirection);
     }
 
     @GetMapping("/trainings/{id_training}")
@@ -26,8 +27,24 @@ public class TrainingController {
     }
 
     @GetMapping("/trainings/participants")
-    public List<Training> getTrainingsWithParticipants(int page){
-        int pageNumber = page >= 0 ? page : 0;
-        return trainingService.getTrainingsWithParticipants(pageNumber);
+    public List<Training> getTrainingsWithParticipants(@RequestParam(required = false) Integer page, Sort.Direction sort){
+        int pageNumber = page != null && page >= 0 ? page : 0;
+        Sort.Direction sortDirection = sort != null ? sort : Sort.Direction.ASC;
+        return trainingService.getTrainingsWithParticipants(pageNumber, sortDirection);
+    }
+
+    @PostMapping("/trainings")
+    public Training addTraining(@RequestBody Training training){
+        return trainingService.addTraining(training);
+    }
+
+    @PutMapping("/trainings")
+    public Training editTraining(@RequestBody Training training){
+        return trainingService.editTraining(training);
+    }
+
+    @DeleteMapping("/trainings/{id}")
+    public void deleteTraining(@PathVariable long id){
+        trainingService.deleteTraining(id);
     }
 }
