@@ -9,22 +9,19 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "users")
 public class User {
     @Id
-    private long idUser;
+    @Column(name = "id")
+    private long id;
     private String name;
     private String surname;
     private String email;
     private String password;
-    private long id_user_details;
+    private long user_detail_id;
     private long user_role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_training",
-            joinColumns = @JoinColumn(name = "idUser"),
-            inverseJoinColumns = @JoinColumn(name = "idTraining")
-    )
+    @ManyToMany(mappedBy = "users")
 
     private List<Training> trainings;
 }

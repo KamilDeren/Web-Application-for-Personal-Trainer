@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface TrainingRepository extends JpaRepository <Training, Long>{
-    @Query("SELECT t FROM Training t LEFT JOIN FETCH t.users u")
+    @Query("SELECT t FROM Training t LEFT JOIN t.users u")
     List<Training> findAllTrainings(Pageable page);
 }

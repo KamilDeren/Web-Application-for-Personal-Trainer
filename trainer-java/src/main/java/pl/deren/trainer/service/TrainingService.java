@@ -30,16 +30,16 @@ public class TrainingService {
     public List<Training> getTrainingsWithParticipants(int page) {
         List<Training> allTrainings = trainingRepository.findAllTrainings(PageRequest.of(page, PAGE_SIZE));
         List<Long> ids = allTrainings.stream()
-                .map(Training::getIdTraining)
+                .map(Training::getId)
                 .collect(Collectors.toList());
-        List<User> users = userRepository.findAllByIdUserIn(ids);
-        allTrainings.forEach(training -> training.setUsers(extractUsers(users, training.getIdTraining())));
+        List<User> users = userRepository.findAllByIdIn(ids);
+        allTrainings.forEach(training -> training.setUsers(extractUsers(users, training.getId())));
         return allTrainings;
     }
 
     private List<User> extractUsers(List<User> users, long idTraining) {
         return users.stream()
-                .filter(user -> user.getIdUser() == idTraining)
+                .filter(user -> user.getId() == idTraining)
                 .collect(Collectors.toList());
     }
 }
