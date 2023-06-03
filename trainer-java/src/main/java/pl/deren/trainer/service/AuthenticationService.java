@@ -9,9 +9,14 @@ import pl.deren.trainer.config.JwtService;
 import pl.deren.trainer.controller.AuthenticationRequest;
 import pl.deren.trainer.controller.AuthenticationResponse;
 import pl.deren.trainer.controller.RegisterRequest;
+import pl.deren.trainer.model.City;
 import pl.deren.trainer.model.User;
-import pl.deren.trainer.model.Role;
+import pl.deren.trainer.model.UserDetail;
+import pl.deren.trainer.model.UserRole;
 import pl.deren.trainer.repository.UserRepository;
+
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -23,18 +28,25 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = User
-                .builder()
-                .name(request.getName())
-                .surname(request.getSurname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .id(request.getId())
-                .phone_number(request.getPhone_number())
-                .role(Role.TRAINEE)
-                .user_role(1)
-                .user_detail_id(request.getUser_detail_id())
-                .build();
+        UserRole userRole = new UserRole();
+        userRole.setId(3L); // Set the user role ID based on the request
+
+        City city = new City();
+        city.setCity_name(request.getCity_name());
+
+        UserDetail userDetail = new UserDetail();
+        userDetail.setPhoneNumber(request.getPhone_number());
+        userDetail.setSex(request.getSex());
+        userDetail.setCreatedAt(Timestamp.from(Instant.now()));
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setUserRole(userRole); // Set the user role
+        user.setUserDetail(userDetail); // Set the user detail
+
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);

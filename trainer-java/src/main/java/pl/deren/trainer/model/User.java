@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,24 +25,26 @@ public class User implements UserDetails {
     private String surname;
     private String email;
     private String password;
-    private String city;
-    private long phone_number;
-    private String sex;
-    private Timestamp created_at;
-    private String image;
-    private long user_detail_id;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-    private long user_role;
+    @Column(name = "user_detail_id", insertable = false, updatable = false)
+    private long userDetailId;
+    @Column(name = "user_role_id", insertable = false, updatable = false)
+    private long userRoleId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_role_id")
+    private UserRole userRole;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_detail_id")
+    private UserDetail userDetail;
 
     @ManyToMany(mappedBy = "users")
-
     private List<Training> trainings;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(userRole.getRoleName()));
     }
 
     @Override

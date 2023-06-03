@@ -18,10 +18,11 @@ public class RegisterRequest {
     private String surname;
     private String email;
     private String password;
-    private String city;
     private long phone_number;
     private String sex;
     private Timestamp created_at;
-    private String image;
-    private long user_detail_id;
+    private String city_name;
+    /*private long city_id;
+    private long user_detail_id;*/
+    private long user_role_id;
 }
