@@ -5,10 +5,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.deren.trainer.config.JwtService;
-import pl.deren.trainer.controller.AuthenticationRequest;
-import pl.deren.trainer.controller.AuthenticationResponse;
-import pl.deren.trainer.controller.RegisterRequest;
+import pl.deren.trainer.authentication.AuthenticationRequest;
+import pl.deren.trainer.authentication.AuthenticationResponse;
+import pl.deren.trainer.model.RegisterRequest;
 import pl.deren.trainer.model.City;
 import pl.deren.trainer.model.User;
 import pl.deren.trainer.model.UserDetail;
@@ -29,7 +28,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         UserRole userRole = new UserRole();
-        userRole.setId(3L); // Set the user role ID based on the request
+        userRole.setId(3L);
 
         City city = new City();
         city.setCity_name(request.getCity_name());
@@ -44,8 +43,8 @@ public class AuthenticationService {
         user.setSurname(request.getSurname());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setUserRole(userRole); // Set the user role
-        user.setUserDetail(userDetail); // Set the user detail
+        user.setUserRole(userRole);
+        user.setUserDetail(userDetail);
 
         userRepository.save(user);
 

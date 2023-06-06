@@ -6,23 +6,23 @@ import pl.deren.trainer.model.User;
 import pl.deren.trainer.service.UserService;
 
 @RestController
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    //Todo add some safety
-    @PostMapping("/users")
+    @PostMapping
     public User addTraining(@RequestBody User user){
         return userService.addUser(user);
     }
 
-    @PutMapping("/users")
+    @PutMapping
     public User editTraining(@RequestBody User user){
         return userService.editUser(user);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public void deleteTraining(@PathVariable long id){
         userService.deleteUser(id);
     }

@@ -1,4 +1,4 @@
-package pl.deren.trainer.config;
+package pl.deren.trainer.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

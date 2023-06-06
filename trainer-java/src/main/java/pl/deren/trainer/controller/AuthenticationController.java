@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.deren.trainer.authentication.AuthenticationRequest;
+import pl.deren.trainer.authentication.AuthenticationResponse;
+import pl.deren.trainer.model.RegisterRequest;
 import pl.deren.trainer.service.AuthenticationService;
 
 @RestController

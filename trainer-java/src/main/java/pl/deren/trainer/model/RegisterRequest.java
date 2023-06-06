@@ -1,4 +1,4 @@
-package pl.deren.trainer.controller;
+package pl.deren.trainer.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
