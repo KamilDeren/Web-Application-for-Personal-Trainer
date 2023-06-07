@@ -34,17 +34,23 @@ public class AuthenticationService {
         city.setCity_name(request.getCity_name());
 
         UserDetail userDetail = new UserDetail();
+        userDetail.setCity(city);
+        userDetail.setCityId(city.getId());
         userDetail.setPhoneNumber(request.getPhone_number());
         userDetail.setSex(request.getSex());
         userDetail.setCreatedAt(Timestamp.from(Instant.now()));
 
-        User user = new User();
-        user.setName(request.getName());
-        user.setSurname(request.getSurname());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setUserRole(userRole);
-        user.setUserDetail(userDetail);
+        var user = User.builder()
+                .name(request.getName())
+                .surname(request.getSurname())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .userRole(userRole)
+                .userDetail(userDetail)
+                .id(54)
+                .userDetailId(userDetail.getId())
+                .userRoleId(userRole.getId())
+                .build();
 
         userRepository.save(user);
 
