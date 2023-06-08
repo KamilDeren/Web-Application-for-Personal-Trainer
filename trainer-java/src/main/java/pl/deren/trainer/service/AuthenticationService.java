@@ -1,6 +1,9 @@
 package pl.deren.trainer.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,18 +28,22 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    @Autowired
+    private EntityManager entityManager;
 
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
+
         UserRole userRole = new UserRole();
         userRole.setId(3L);
 
         City city = new City();
-        city.setCity_name(request.getCity_name());
+        city.setCityName(request.getCityName());
+        entityManager.persist(city);
 
         UserDetail userDetail = new UserDetail();
         userDetail.setCity(city);
-        userDetail.setCityId(city.getId());
-        userDetail.setPhoneNumber(request.getPhone_number());
+        userDetail.setPhoneNumber(request.getPhoneNumber());
         userDetail.setSex(request.getSex());
         userDetail.setCreatedAt(Timestamp.from(Instant.now()));
 
@@ -47,14 +54,12 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .userRole(userRole)
                 .userDetail(userDetail)
-                .id(54L)
-                .userDetailId(userDetail.getId())
-                .userRoleId(userRole.getId())
                 .build();
 
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(user);
+
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)

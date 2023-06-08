@@ -2,6 +2,7 @@ package pl.deren.trainer.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import pl.deren.trainer.DTO.TrainingDTO;
 import pl.deren.trainer.model.Training;
 import pl.deren.trainer.service.TrainingService;
 
@@ -15,18 +16,17 @@ public class TrainingController {
     private final TrainingService trainingService;
 
     @GetMapping
-    public List<Training> getTrainings(){
+    public List<TrainingDTO> getTrainings(){
         return trainingService.getTrainings();
     }
 
     @GetMapping("/{id_training}")
-    public Training getSingleTraining(@PathVariable long id_training){
+    public TrainingDTO getSingleTraining(@PathVariable long id_training){
         return trainingService.getSingleTraining(id_training);
     }
-
-    @GetMapping("/participants")
-    public List<Training> getTrainingsWithParticipants(){
-        return trainingService.getTrainingsWithParticipants();
+    @GetMapping("/{id_training}/participants")
+    public List<TrainingDTO> getSingleTrainingWithParticipants(@PathVariable long id_training){
+        return trainingService.getSingleTrainingWithParticipants(id_training);
     }
 
     @PostMapping

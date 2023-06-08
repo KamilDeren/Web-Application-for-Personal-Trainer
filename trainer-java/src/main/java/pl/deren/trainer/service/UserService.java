@@ -4,9 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.deren.trainer.DTO.UserDTO;
-import pl.deren.trainer.DTO.UserDetailDTO;
-import pl.deren.trainer.model.User;
 import pl.deren.trainer.model.City;
+import pl.deren.trainer.model.User;
 import pl.deren.trainer.model.UserDetail;
 import pl.deren.trainer.model.UserRole;
 import pl.deren.trainer.repository.UserRepository;
@@ -20,31 +19,27 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User addUser(User user) {
-        return userRepository.save(user);
-    }
-
     @Transactional
     public User editUser(User user) {
         User userEdited = userRepository.findById(user.getId()).orElseThrow();
         userEdited.setName(user.getName());
-        userEdited.setSurname(userEdited.getSurname());
+        userEdited.setSurname(user.getSurname());
         userEdited.setEmail(user.getEmail());
         userEdited.setPassword(user.getPassword());
 
         UserDetail userDetail = userEdited.getUserDetail();
-        if (userDetail != null) {
-            userDetail.setCity(user.getUserDetail().getCity());
-            userDetail.setPhoneNumber(user.getUserDetail().getPhoneNumber());
-            userDetail.setSex(user.getUserDetail().getSex());
-        }
+
+        City city = userDetail.getCity();
+        city.setCityName(user.getCityName());
+
+        userDetail.setCity(city);
+        userDetail.setPhoneNumber(user.getPhoneNumber());
+        userDetail.setSex(user.getSex());
 
         UserRole userRole = userEdited.getUserRole();
-        if (userRole != null) {
-            userRole.setRoleName(user.getUserRole().getRoleName());
-        }
+        userRole.setRoleName(user.getRoleName());
 
-        return userEdited;
+        return userRepository.save(userEdited);
     }
 
     public void deleteUser(long id) {
@@ -60,22 +55,31 @@ public class UserService {
 
     private UserDTO convertToDTO(User user) {
         UserDTO userDTO = new UserDTO();
+
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
         userDTO.setEmail(user.getEmail());
 
-        UserDetail userDetail = user.getUserDetail();
-        if (userDetail != null) {
-            UserDetailDTO userDetailDTO = new UserDetailDTO();
-            userDetailDTO.setPhoneNumber(userDetail.getPhoneNumber());
-            userDetailDTO.setSex(userDetail.getSex());
-            userDTO.setUserDetail(userDetailDTO);
+        if (user.getUserRole() != null) {
+            userDTO.setRoleName(user.getUserRole().getRoleName());
         }
-        City city = user.getUserDetail().getCity();
-        if (city != null)
-            city.setCity_name(city.getCity_name());
+
+        if (user.getUserDetail() != null) {
+            userDTO.setPhoneNumber(user.getUserDetail().getPhoneNumber());
+            userDTO.setSex(user.getUserDetail().getSex());
+            userDTO.setCreatedAt(user.getUserDetail().getCreatedAt());
+
+            if (user.getUserDetail().getCity() != null) {
+                userDTO.setCityName(user.getUserDetail().getCity().getCityName());
+            }
+        }
 
         return userDTO;
+    }
+
+    public UserDTO getUserById(long id) throws Exception {
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception("User not found with ID: " + id));
+        return convertToDTO(user);
     }
 }

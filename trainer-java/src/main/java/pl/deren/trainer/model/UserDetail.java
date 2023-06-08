@@ -15,21 +15,24 @@ import java.sql.Timestamp;
 public class UserDetail {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
+
     @Column(name = "phone_number")
     private Long phoneNumber;
+
     private String sex;
+
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name = "city_id", insertable = false, updatable = false)
-    private Long cityId;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToOne(mappedBy = "userDetail")
+    @OneToOne
+    @JoinColumn(name = "id")
     private User user;
 
 }
