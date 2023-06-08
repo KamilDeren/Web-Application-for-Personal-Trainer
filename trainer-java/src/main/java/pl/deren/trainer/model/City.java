@@ -1,5 +1,6 @@
 package pl.deren.trainer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -16,9 +17,10 @@ import lombok.*;
 public class City {
 
     @Id
-    private long id;
+    private Long id;
     private String city_name;
 
+    @JsonIgnoreProperties("userDetail")
     @OneToOne(mappedBy = "city")
     private UserDetail userDetail;
 }

@@ -13,16 +13,16 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    private long id;
+    private Long id;
     private String name;
     private String surname;
     private String email;
     private String password;
-    private long phone_number;
+    private Long phone_number;
     private String sex;
     private Timestamp created_at;
     private String city_name;
-    /*private long city_id;
-    private long user_detail_id;*/
-    private long user_role_id;
+    private Long city_id;
+    private Long user_detail_id;
+    private Long user_role_id;
 }

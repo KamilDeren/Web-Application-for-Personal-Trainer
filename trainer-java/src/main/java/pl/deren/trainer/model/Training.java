@@ -17,7 +17,7 @@ public class Training {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String title;
     private String level;
@@ -26,7 +26,7 @@ public class Training {
     private Timestamp date;
 
     private String room;
-    private long run_by;
+    private Long run_by;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Berlin")
     private Timestamp created_at;

@@ -15,15 +15,15 @@ import java.sql.Timestamp;
 public class UserDetail {
 
     @Id
-    private long id;
+    private Long id;
     @Column(name = "phone_number")
-    private long phoneNumber;
+    private Long phoneNumber;
     private String sex;
     @Column(name = "created_at")
     private Timestamp createdAt;
 
     @Column(name = "city_id", insertable = false, updatable = false)
-    private long cityId;
+    private Long cityId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")

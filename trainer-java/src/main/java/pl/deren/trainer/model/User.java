@@ -1,5 +1,7 @@
 package pl.deren.trainer.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,23 +22,28 @@ public class User implements UserDetails {
     @Id
     @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String surname;
     private String email;
     private String password;
 
+    @JsonIgnoreProperties("userDetailId")
     @Column(name = "user_detail_id", insertable = false, updatable = false)
-    private long userDetailId;
+    private Long userDetailId;
+    @JsonIgnoreProperties("userRoleId")
     @Column(name = "user_role_id", insertable = false, updatable = false)
-    private long userRoleId;
+    private Long userRoleId;
 
     @ManyToOne
     @JoinColumn(name = "user_role_id")
+    @JsonIgnoreProperties("userRole")
+    @JsonBackReference
     private UserRole userRole;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_detail_id")
+    @JsonIgnoreProperties("userDetail")
     private UserDetail userDetail;
 
     @ManyToMany(mappedBy = "users")

@@ -1,7 +1,6 @@
 package pl.deren.trainer.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import pl.deren.trainer.model.Training;
 import pl.deren.trainer.service.TrainingService;
@@ -16,10 +15,8 @@ public class TrainingController {
     private final TrainingService trainingService;
 
     @GetMapping
-    public List<Training> getTrainings(@RequestParam(required = false) Integer page, Sort.Direction sort){
-        int pageNumber = page != null && page >= 0 ? page : 0;
-        Sort.Direction sortDirection = sort != null ? sort : Sort.Direction.ASC;
-        return trainingService.getTrainings(pageNumber, sortDirection);
+    public List<Training> getTrainings(){
+        return trainingService.getTrainings();
     }
 
     @GetMapping("/{id_training}")
@@ -28,10 +25,8 @@ public class TrainingController {
     }
 
     @GetMapping("/participants")
-    public List<Training> getTrainingsWithParticipants(@RequestParam(required = false) Integer page, Sort.Direction sort){
-        int pageNumber = page != null && page >= 0 ? page : 0;
-        Sort.Direction sortDirection = sort != null ? sort : Sort.Direction.ASC;
-        return trainingService.getTrainingsWithParticipants(pageNumber, sortDirection);
+    public List<Training> getTrainingsWithParticipants(){
+        return trainingService.getTrainingsWithParticipants();
     }
 
     @PostMapping

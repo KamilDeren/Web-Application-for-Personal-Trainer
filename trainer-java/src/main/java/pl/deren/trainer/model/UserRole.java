@@ -1,9 +1,12 @@
 package pl.deren.trainer.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +21,8 @@ public class UserRole {
     @Column(name = "role_name")
     private String roleName;
 
+    @OneToMany(mappedBy = "userRole", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<User> users;
 
 }

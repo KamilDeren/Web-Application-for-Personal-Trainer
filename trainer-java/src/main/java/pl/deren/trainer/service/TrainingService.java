@@ -2,8 +2,6 @@ package pl.deren.trainer.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.deren.trainer.model.Training;
 import pl.deren.trainer.model.User;
@@ -17,20 +15,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TrainingService {
 
-    private static final int PAGE_SIZE = 10;
     private final TrainingRepository trainingRepository;
     private final UserRepository userRepository;
 
-    public List<Training> getTrainings(int page, Sort.Direction sort){
-        return trainingRepository.findAllTrainings(PageRequest.of(page, PAGE_SIZE, Sort.by(sort, "id")));
+    public List<Training> getTrainings(){
+        return trainingRepository.findAllTrainings();
     }
 
     public Training getSingleTraining(long id_training){
         return trainingRepository.findById(id_training).orElseThrow();
     }
 
-    public List<Training> getTrainingsWithParticipants(int page, Sort.Direction sort) {
-        List<Training> allTrainings = trainingRepository.findAllTrainings(PageRequest.of(page, PAGE_SIZE, Sort.by(sort, "id")));
+    public List<Training> getTrainingsWithParticipants() {
+        List<Training> allTrainings = trainingRepository.findAllTrainings();
         List<Long> ids = allTrainings.stream()
                 .map(Training::getId)
                 .collect(Collectors.toList());
@@ -51,6 +48,8 @@ public class TrainingService {
 
     @Transactional
     public Training editTraining(Training training) {
+        System.out.println(trainingRepository.findById(training.getId()));
+        System.out.println(trainingRepository.findById(99L));
         Training trainingEdited = trainingRepository.findById(training.getId()).orElseThrow();
         trainingEdited.setTitle(training.getTitle());
         trainingEdited.setLevel(trainingEdited.getLevel());

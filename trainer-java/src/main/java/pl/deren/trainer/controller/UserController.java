@@ -13,17 +13,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public User addTraining(@RequestBody User user){
+    public User addUser(@RequestBody User user){
         return userService.addUser(user);
     }
 
     @PutMapping
-    public User editTraining(@RequestBody User user){
+    public User editUser(@RequestBody User user){
         return userService.editUser(user);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTraining(@PathVariable long id){
+    public void deleteUser(@PathVariable long id){
         userService.deleteUser(id);
     }
 }

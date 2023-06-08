@@ -47,7 +47,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .userRole(userRole)
                 .userDetail(userDetail)
-                .id(54)
+                .id(54L)
                 .userDetailId(userDetail.getId())
                 .userRoleId(userRole.getId())
                 .build();
