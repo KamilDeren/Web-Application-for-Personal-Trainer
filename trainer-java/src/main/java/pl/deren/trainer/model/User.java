@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,16 +21,15 @@ public class User implements UserDetails {
     @Id
     @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String name;
-    private String surname;
-    private String email;
-    private String password;
+    private Long id;
 
-    @Column(name = "user_detail_id", insertable = false, updatable = false)
-    private long userDetailId;
-    @Column(name = "user_role_id", insertable = false, updatable = false)
-    private long userRoleId;
+    private String name;
+
+    private String surname;
+
+    private String email;
+
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "user_role_id")
@@ -38,6 +38,21 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_detail_id")
     private UserDetail userDetail;
+
+    @Transient
+    private Long phoneNumber;
+
+    @Transient
+    private String sex;
+
+    @Transient
+    private Timestamp createdAt;
+
+    @Transient
+    private String cityName;
+
+    @Transient
+    private String roleName;
 
     @ManyToMany(mappedBy = "users")
     private List<Training> trainings;

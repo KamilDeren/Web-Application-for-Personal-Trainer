@@ -2,14 +2,14 @@ package pl.deren.trainer.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pl.deren.trainer.DTO.TrainingDTO;
 import pl.deren.trainer.model.Training;
 import pl.deren.trainer.model.User;
 import pl.deren.trainer.repository.TrainingRepository;
-import pl.deren.trainer.repository.UserRepository;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,26 +17,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TrainingService {
 
-    private static final int PAGE_SIZE = 10;
     private final TrainingRepository trainingRepository;
-    private final UserRepository userRepository;
 
-    public List<Training> getTrainings(int page, Sort.Direction sort){
-        return trainingRepository.findAllTrainings(PageRequest.of(page, PAGE_SIZE, Sort.by(sort, "id")));
+    public List<TrainingDTO> getTrainings(){
+        return trainingRepository.findAllTrainings();
     }
 
-    public Training getSingleTraining(long id_training){
-        return trainingRepository.findById(id_training).orElseThrow();
+    public TrainingDTO getSingleTraining(long id_training){
+        return trainingRepository.findSingleTraining(id_training);
     }
 
-    public List<Training> getTrainingsWithParticipants(int page, Sort.Direction sort) {
-        List<Training> allTrainings = trainingRepository.findAllTrainings(PageRequest.of(page, PAGE_SIZE, Sort.by(sort, "id")));
-        List<Long> ids = allTrainings.stream()
-                .map(Training::getId)
-                .collect(Collectors.toList());
-        List<User> users = userRepository.findAllByIdIn(ids);
-        allTrainings.forEach(training -> training.setUsers(extractUsers(users, training.getId())));
-        return allTrainings;
+    public List<TrainingDTO> getSingleTrainingWithParticipants(long id_training){
+        return trainingRepository.findSingleTrainingWithUsers(id_training);
     }
 
     private List<User> extractUsers(List<User> users, long idTraining) {
@@ -46,6 +38,7 @@ public class TrainingService {
     }
 
     public Training addTraining(Training training) {
+        training.setCreated_at(Timestamp.from(Instant.now()));
         return trainingRepository.save(training);
     }
 

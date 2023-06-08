@@ -1,7 +1,6 @@
 package pl.deren.trainer.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +14,9 @@ import java.util.List;
 @Table(name = "training")
 public class Training {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", insertable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String title;
     private String level;
@@ -26,12 +25,11 @@ public class Training {
     private Timestamp date;
 
     private String room;
-    private long run_by;
+    private Long run_by;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Berlin")
     private Timestamp created_at;
 
-    @JsonIgnoreProperties("trainings")
     @ManyToMany
     @JoinTable(name = "user_training",
             joinColumns = @JoinColumn(name = "training_id"),
