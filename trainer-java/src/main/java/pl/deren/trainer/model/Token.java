@@ -1,11 +1,10 @@
-package pl.deren.trainer.token;
+package pl.deren.trainer.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.deren.trainer.model.User;
 
 @Data
 @Builder
@@ -21,6 +20,9 @@ public class Token {
 
     @Column(unique = true)
     public String token;
+
+    @Column(unique = true)
+    public String refreshToken;
 
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;

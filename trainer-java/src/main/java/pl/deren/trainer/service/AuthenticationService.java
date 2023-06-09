@@ -21,8 +21,8 @@ import pl.deren.trainer.model.UserDetail;
 import pl.deren.trainer.model.UserRole;
 import pl.deren.trainer.repository.TokenRepository;
 import pl.deren.trainer.repository.UserRepository;
-import pl.deren.trainer.token.Token;
-import pl.deren.trainer.token.TokenType;
+import pl.deren.trainer.model.Token;
+import pl.deren.trainer.model.TokenType;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -69,7 +69,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
-        saveUserToken(savedUser, jwtToken);
+        saveUserToken(savedUser, jwtToken, refreshToken);
 
         return AuthenticationResponse
                 .builder()
@@ -87,7 +87,7 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        saveUserToken(user, jwtToken, refreshToken);
 
         return AuthenticationResponse
                 .builder()
@@ -96,11 +96,12 @@ public class AuthenticationService {
                 .build();
     }
 
-    private void saveUserToken(User user, String jwtToken){
+    private void saveUserToken(User user, String jwtToken, String refreshToken){
         var token = Token
                 .builder()
                 .user(user)
                 .token(jwtToken)
+                .refreshToken(refreshToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
                 .revoked(false)
@@ -138,7 +139,7 @@ public class AuthenticationService {
                 var accessToken = jwtService.generateToken(userDetails);
 
                 revokeAllUserTokens(userDetails);
-                saveUserToken(userDetails, accessToken);
+                saveUserToken(userDetails, accessToken, refreshToken);
 
                 var authResponse = AuthenticationResponse
                         .builder()
